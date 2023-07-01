@@ -292,6 +292,7 @@
                             print-prepared-spells?
                             prepares-spells
                             prepared-spells-by-class]
+  
   (let [flat-spells (char5e/flat-spells spells-known)
         spells-map @(subscribe [::spells/spells-map])
         plugin-spells-map @(subscribe [::spells/plugin-spells-map])
@@ -379,14 +380,17 @@
        spell-pages)))))
 
 (defn spellcasting-fields [built-char print-prepared-spells?]
-  (let [spells-known (char5e/spells-known built-char)
-        spell-attack-modifier-fn (char5e/spell-attack-modifier-fn built-char)
+  (let [spell-attack-modifier-fn (char5e/spell-attack-modifier-fn built-char)
         spell-save-dc-fn (char5e/spell-save-dc-fn built-char)
         spell-slots (char5e/spell-slots built-char)
         prepares-spells (char5e/prepares-spells built-char)
-        prepared-spells-by-class (char5e/prepared-spells-by-class built-char)]
+        prepared-spells-by-class (char5e/prepared-spells-by-class built-char)
+        sorted-spells-known (into {}
+                                  (map (fn [[id datum]]
+                                         [id (into (sorted-map) datum)]))
+                                  (char5e/spells-known built-char))]
 
-    (spell-page-fields spells-known
+    (spell-page-fields sorted-spells-known
                        spell-slots
                        spell-save-dc-fn
                        spell-attack-modifier-fn
@@ -497,7 +501,9 @@
                  {:keys [print-character-sheet?
                          print-spell-cards?
                          print-prepared-spells?
-                         print-large-abilities?] :as options}]
+                         print-large-abilities?
+                         print-character-sheet-style?
+                         print-spell-card-dc-mod?] :as options}]
   (let [race (char5e/race built-char)
         subrace (char5e/subrace built-char)
         abilities (abilities-spec
@@ -546,6 +552,7 @@
       :initiative (common/bonus-str (es/entity-val built-char :initiative))
       :speed speed
       :hp-max (es/entity-val built-char :max-hit-points)
+      :hp-current (char5e/current-hit-points built-char)
       :passive (es/entity-val built-char :passive-perception)
       :other-profs (other-profs-field built-char)
       :personality-traits (s/join "\n\n" [(char5e/personality-trait-1 built-char) (char5e/personality-trait-2 built-char)])
@@ -569,7 +576,10 @@
       :faction-image-url-failed (char5e/faction-image-url-failed built-char)
       :faction-name (char5e/faction-name built-char)
       :print-character-sheet? print-character-sheet?
-      :print-spell-cards? print-spell-cards?}
+      :print-spell-cards? print-spell-cards?
+      :print-character-sheet-style? print-character-sheet-style?
+      :print-spell-card-dc-mod? print-spell-card-dc-mod?
+      }
      (attacks-and-spellcasting-fields built-char)
      (skill-fields built-char)
      abilities

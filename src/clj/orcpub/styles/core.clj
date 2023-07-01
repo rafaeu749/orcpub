@@ -1,6 +1,5 @@
 (ns orcpub.styles.core
-     (:require [garden.def :refer [defstylesheet defstyles]]
-               [garden.stylesheet :refer [at-media at-keyframes]]
+     (:require [garden.stylesheet :refer [at-media at-keyframes]]
                [garden.units :refer [px]]
                [orcpub.constants :as const]
                [garden.selectors :as s]))
@@ -197,6 +196,8 @@
    [:.m-b-40
     {:margin-bottom "40px"}]
 
+   [:.m-l-2
+    {:margin-left "2px"}]
    [:.m-l--10
     {:margin-left "-10px"}]
    [:.m-l--5
@@ -452,11 +453,13 @@
    [:.tooltip [:.tooltiptext
                {:visibility "hidden"
                 :width "130px"
-                :bottom "100%"
+                :bottom "calc(100% - -5px)"
                 :left "50%"
                 :margin-left "-60px"
                 :background-color "black"
                 :font-family "Open Sans, sans-serif"
+                :font-size "14px"
+                :font-weight "normal"
                 :color "#fff"
                 :text-align "center"
                 :padding "10px 10px"
@@ -754,27 +757,29 @@
     xs-query
     [:.user-icon
      {:display :none}]
-     [:.character-builder-header
-      #_{:margin-bottom 0}]
-     [:.list-character-summary
-      {:font-size "18px"}]
-     [:.character-summary
-      {:flex-wrap :wrap}]
-     [:.app-header
-      {:height :auto
-       :background-image :none
-       :background-color "rgba(0, 0, 0, 0.3)"
-       :min-height 0}]
-     [:.app-header-bar
-      {:min-height (px 50)
-       :backdrop-filter :none
-       :-webkit-backdrop-filter :none}]
-     [:.content
-      {:width "100%"}]
-     #_[:.options-column
-      {:width "100%"}]
-     [:.header-button-text :.header-links
-      {:display :none}])
+    [:.character-builder-header
+     #_{:margin-bottom 0}]
+    [:.list-character-summary
+     {:font-size "18px"}]
+    [:.character-summary
+     {:flex-wrap :wrap}]
+    [:.app-header
+     {:height :auto
+      :background-image :none
+      :background-color "rgba(0, 0, 0, 0.3)"
+      :min-height 0}]
+    [:.app-header-bar
+     {:min-height (px 50)
+      :backdrop-filter :none
+      :-webkit-backdrop-filter :none}]
+    [:.app-header-menu
+     {:flex-grow 1}]
+    [:.content
+     {:width "100%"}]
+    #_[:.options-column
+       {:width "100%"}]
+    [:.header-button-text :.header-links
+     {:display :none}])
 
     #_(at-media
      xs-query
@@ -856,9 +861,7 @@
 
 (def app
   (concat
-   [
-
-    [:.character-builder-header
+   [[:.character-builder-header
      {:margin-bottom "19px"}]
 
     [:.senses
@@ -878,12 +881,12 @@
      {:margin "10px 0"}]
 
     #_["input::-webkit-outer-spin-button"
-     "input::-webkit-inner-spin-button"
-     {:-webkit-appearance :none
-      :margin 0}]
+       "input::-webkit-inner-spin-button"
+       {:-webkit-appearance :none
+        :margin 0}]
 
     #_["input[type=number]"
-     {:-moz-appearance :textfield}]
+       {:-moz-appearance :textfield}]
 
     [:a :a:visited
      {:color orange}]
@@ -938,8 +941,8 @@
      {:border-bottom "1px solid rgba(255,255,255,0.5)"}]
 
     #_[:.header-tab:hover
-     [(garden.selectors/& (garden.selectors/not :.disabled))
-      {:background-color orange}]]
+       [(garden.selectors/& (garden.selectors/not :.disabled))
+        {:background-color orange}]]
 
     [:.app-header-bar
      {:min-height (px 81)
@@ -948,7 +951,7 @@
       :background-color "rgba(0, 0, 0, 0.25)"}]
 
     #_[:.options-column
-     {:width "300px"}]
+       {:width "300px"}]
 
     [:.builder-column
      {:display :none
@@ -985,7 +988,7 @@
       :border-bottom "5px solid rgba(72,72,72,0.37)"}
      [:.builder-tab-text
       {:opacity 0.2}]]
- 
+
     [:.selected-builder-tab
      {:border-bottom-color "#f1a20f"}
      [:.builder-tab-text
@@ -1038,7 +1041,7 @@
 
     [:.remove-item-button
      {:color button-color
-      :font-size "16px" 
+      :font-size "16px"
       :margin-left "5px"
       :cursor :pointer}]
 
@@ -1087,12 +1090,28 @@
       :cursor :pointer
       :background-image "linear-gradient(to bottom, #f1a20f, #dbab50)"}]
 
+    [:.roll-button
+     {:color :white
+      :min-width "68px"
+      :font-weight 600
+      :font-size "14px"
+      :border :none
+      :border-radius "2px"
+      :padding "6px 6px"
+      :margin-right "2px"
+      :margin-left "2px"
+      :margin-bottom "2px"
+      :margin-top "2px"
+      :cursor :pointer
+      :background-image "linear-gradient(to bottom, #f1a20f, #dbab50)"}]
+
     [:.form-button:hover
      {:box-shadow "0 2px 6px 0 rgba(0, 0, 0, 0.5)"}]
 
     [:.form-button.disabled
      {:opacity 0.5
-      :cursor :not-allowed}]
+      :cursor :not-allowed
+      :pointer-events "none"}]
 
     [:.form-button.disabled:hover
      {:box-shadow :none}]
@@ -1213,16 +1232,16 @@
       {:stroke "#363636"}]
 
      [:.input
-     {:background-color :transparent
-      :color :black
-      :border "1px solid #282828"
-      :border-radius "5px"
-      :margin-top "5px"
-      :display :block
-      :padding "10px"
-      :width "100%"
-      :box-sizing :border-box
-      :font-size "14px"}]
+      {:background-color :transparent
+       :color :black
+       :border "1px solid #282828"
+       :border-radius "5px"
+       :margin-top "5px"
+       :display :block
+       :padding "10px"
+       :width "100%"
+       :box-sizing :border-box
+       :font-size "14px"}]
 
      [:.form-button
       {:background-image "linear-gradient(to bottom, #33658A, #33658A)"}]

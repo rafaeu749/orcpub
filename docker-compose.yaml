@@ -9,19 +9,28 @@ services:
       EMAIL_ACCESS_KEY: ''
       EMAIL_SECRET_KEY: ''
       EMAIL_SERVER_PORT: 587
+      # Email address to send from, will default to 'no-reply@orcpub.com'
+      EMAIL_FROM_ADDRESS: ''
       # Email address to send errors to
       EMAIL_ERRORS_TO: ''
       EMAIL_SSL: 'FALSE'
       EMAIL_TLS: 'FALSE'
-      DATOMIC_URL: datomic:free://datomic:4334/orcpub
+      # Datomic connection string - Make sure the <change this> matches the DATOMIC_PASSWORD below 
+      DATOMIC_URL: datomic:free://datomic:4334/orcpub?password=<change this>
+      # The secret used to hash your password in the browser, 20+ characters recommended
+      SIGNATURE: '<change me to something unique>'
     depends_on:
       - datomic
     restart: always
   datomic:
     image: orcpub/datomic:latest
+    environment:
+      ADMIN_PASSWORD: <change this as well!>
+      # Must match the <change this> in the DATOMIC_URL above.
+      DATOMIC_PASSWORD: <change this>
     volumes:
       - ./data:/data
-      - ./deploy/transactor.properties:/datomic/transactor.properties
+      - ./logs:/logs
     restart: always
   web:
     image: nginx:alpine
