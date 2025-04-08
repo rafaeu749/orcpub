@@ -1456,8 +1456,8 @@
                   [:a.orange {:href "/privacy-policy" :target :_blank} "Privacy Policy"]
                   [:a.orange.m-l-5 {:href "/terms-of-use" :target :_blank} "Terms of Use"]]
                  [:div.legal-footer
-                  [:p "© 2020 " [:a.orange {:href "https://github.com/Orcpub/orcpub/" :target :_blank} "Orcpub"]]
-                  [:p "Wizards of the Coast, Dungeons & Dragons, D&D, and their logos are trademarks of Wizards of the Coast LLC in the United States and other countries. © 2020 Wizards. All Rights Reserved. OrcPub.com is not affiliated with, endorsed, sponsored, or specifically approved by Wizards of the Coast LLC."]
+                  [:p "© 2025 " [:a.orange {:href "https://github.com/Orcpub/orcpub/" :target :_blank} "Orcpub"]]
+                  [:p "Wizards of the Coast, Dungeons & Dragons, D&D, and their logos are trademarks of Wizards of the Coast LLC in the United States and other countries. © 2025 Wizards. All Rights Reserved. OrcPub.com is not affiliated with, endorsed, sponsored, or specifically approved by Wizards of the Coast LLC."]
                   [:p "Version " (v/version) " (" (v/date) ")"]]]
                 [debug-data]]]])]))})))
 
@@ -1515,8 +1515,7 @@
     [:div.flex.justify-cont-s-b.w-100-p.align-items-c
      [:div.flex.align-items-c.align-items-t
       (if image-url
-        [:img.m-r-20.m-t-10.m-b-10 {:src image-url
-                                    :style thumbnail-style}])
+        [:img.m-r-20.m-t-10.m-b-10.image-character-thumbnail {:src image-url }])
       [:div.flex.character-summary.m-t-20.m-b-20
        (if (and character-name include-name?) [:span.m-r-20.m-b-5
                                                [:span.character-name character-name]
@@ -3527,7 +3526,9 @@
           "Select Character sheet"
           {:items [{:title "Select" :value " "}
                    {:title "Original 5e Character sheet" :value 1}
-                   {:title "Original 5e Character sheet - optional variant" :value 2}]
+                   {:title "Original 5e Character sheet - optional variant" :value 2}
+                   {:title "Icewind Dale 5e Character sheet" :value 3}
+                   {:title "Petersen Games - Cthulhu Mythos Sagas sheet" :value 4}]
            :value print-character-sheet-style?
            :on-change (make-arg-event-handler ::char/set-print-character-sheet-style? js/parseInt)}]]]
        [:div.flex
